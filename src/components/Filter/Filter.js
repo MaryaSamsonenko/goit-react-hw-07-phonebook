@@ -4,6 +4,7 @@ import { SearchWrapper, Label, Input } from "../Filter/Filter.styled";
 
 export const Filter = () => {
   const dispatch = useDispatch();
+
   return (
     <SearchWrapper>
       <Label htmlFor="name">Find contacts by name </Label>

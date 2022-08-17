@@ -1,9 +1,14 @@
 import { Formik, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useSelector, useDispatch } from "react-redux";
-import { nanoid } from "nanoid";
-import { addContact } from "../../redux/contacts";
-import { contactsSelector } from "../../redux/contacts";
+// import { useSelector, useDispatch } from "react-redux";
+// import { nanoid } from "nanoid";
+// import { addContact } from "../../redux/contacts";
+import {
+  useGetContactsQuery,
+  useAddContactMutation,
+} from "../../redux/contactsApi";
+
+// import { contactsSelector } from "../../redux/contacts";
 import { FormContact, Label, Input, ButtonSubmit } from "./ContactForm.styled";
 
 export const ContactForm = () => {
@@ -24,9 +29,12 @@ export const ContactForm = () => {
       .required("Required field"),
   });
 
-  const contacts = useSelector(contactsSelector);
-  const dispatch = useDispatch();
-  const handleSubmit = ({ name, number }, { resetForm }) => {
+  const { data: contacts } = useGetContactsQuery();
+  const [addContact] = useAddContactMutation();
+  // const contacts = useSelector(contactsSelector);
+  // const dispatch = useDispatch();
+  const handleSubmit = async ({ name, phone }, { resetForm }) => {
+    const contactsAll = { name, phone };
     const hasNameInContacts = contacts.find(
       (contact) => contact.name.toLowerCase() === name.toLowerCase()
     );
@@ -35,7 +43,8 @@ export const ContactForm = () => {
       return;
     }
 
-    dispatch(addContact({ name, number, id: nanoid(4) }));
+    // dispatch(addContact({ name, number, id: nanoid(4) }));
+    await addContact(contactsAll);
     resetForm();
   };
 
@@ -54,8 +63,8 @@ export const ContactForm = () => {
 
         <Label htmlFor="number">Number</Label>
         <div>
-          <Input type="tel" name="number" />
-          <ErrorMessage name="number" component="div" />
+          <Input type="tel" name="phone" />
+          <ErrorMessage name="phone" component="div" />
         </div>
 
         <ButtonSubmit type="submit">Add contact</ButtonSubmit>

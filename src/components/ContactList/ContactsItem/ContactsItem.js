@@ -1,14 +1,19 @@
 import PropTypes from "prop-types";
-import { useDispatch } from "react-redux";
-import { removeContact } from "../../../redux/contacts";
+import { useDeleteContactMutation } from "../../../redux/contactsApi";
 import { Item, Description, Button } from "./ContactsItem.styled";
 
-export const ContactItem = ({ contact: { id, name, number } }) => {
-  const dispatch = useDispatch();
+export const ContactItem = ({ contact: { id, name, phone } }) => {
+  const [deleteContact, { error }] = useDeleteContactMutation();
+  const handleDeleteContact = async () => {
+    await deleteContact({ id });
+    if (error) {
+      alert("Something went wrong. Please try again");
+    }
+  };
   return (
     <Item>
-      <Description>{name}:</Description> <Description>{number}</Description>
-      <Button type="button" onClick={() => dispatch(removeContact(id))}>
+      <Description>{name}:</Description> <Description>{phone}</Description>
+      <Button type="button" onClick={handleDeleteContact}>
         Delete
       </Button>
     </Item>
