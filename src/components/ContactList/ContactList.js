@@ -5,7 +5,7 @@ import { List } from "./ContactList.styled";
 import { ContactItem } from "./ContactsItem/ContactsItem";
 
 export const ContactList = () => {
-  const { data: contacts } = useGetContactsQuery();
+  const { data: contacts, error } = useGetContactsQuery();
 
   const contactsFilter = useSelector(contactsFilterSelector);
 
@@ -17,10 +17,12 @@ export const ContactList = () => {
       : contacts;
   };
   const filtredContacts = getFiltredContacts();
+  console.log(filtredContacts);
   return (
     <List>
       {contacts &&
-        filtredContacts.map((contact) => (
+        !error &&
+        contacts.map((contact) => (
           <ContactItem key={contact.id} contact={contact} />
         ))}
     </List>
