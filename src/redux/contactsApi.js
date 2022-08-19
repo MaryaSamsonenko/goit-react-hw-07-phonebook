@@ -24,14 +24,14 @@ export const contactsApi = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: [{ type: "Contact", id: "LIST" }],
+      invalidatesTags: ["Contact"],
     }),
     deleteContact: builder.mutation({
       query: ({ id }) => ({
         url: `contacts/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: (result, error, id) => [{ type: "Contact", id }],
+      invalidatesTags: ["Contact"],
     }),
   }),
 });
@@ -41,27 +41,3 @@ export const {
   useAddContactMutation,
   useDeleteContactMutation,
 } = contactsApi;
-
-// import { createSlice } from "@reduxjs/toolkit";
-
-// export const contactsSlice = createSlice({
-//   name: "contacts",
-//   initialState: [],
-//   reducers: {
-//     addContact(state, action) {
-//       state.push(action.payload);
-//     },
-//     removeContact(state, action) {
-//       return state.filter((contact) => contact.id !== action.payload);
-//     },
-//   },
-// });
-
-// // Selectors
-// export const contactsSelector = (state) => state.contacts;
-
-// //Actions
-// export const { addContact, removeContact } = contactsSlice.actions;
-
-// // Reducers
-// export default contactsSlice.reducer;

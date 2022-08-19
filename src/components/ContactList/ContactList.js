@@ -17,12 +17,12 @@ export const ContactList = () => {
       : contacts;
   };
   const filtredContacts = getFiltredContacts();
-  console.log(filtredContacts);
+
   return (
     <List>
       {contacts &&
         !error &&
-        contacts.map((contact) => (
+        filtredContacts.map((contact) => (
           <ContactItem key={contact.id} contact={contact} />
         ))}
     </List>

@@ -4,17 +4,17 @@ import { SearchWrapper, Label, Input } from "../Filter/Filter.styled";
 
 export const Filter = () => {
   const dispatch = useDispatch();
+  const handleChange = ({ target: { value } }) => dispatch(setFilter(value));
 
   return (
     <SearchWrapper>
       <Label htmlFor="name">Find contacts by name </Label>
       <div>
         <Input
-          autoComplete="off"
           type="text"
-          name="name"
+          name="filter"
           placeholder="Search name"
-          onChange={({ target: { value } }) => dispatch(setFilter(value))}
+          onChange={handleChange}
         />
       </div>
     </SearchWrapper>
