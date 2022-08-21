@@ -1,14 +1,16 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { combineReducers, createSlice } from "@reduxjs/toolkit";
+import { BASE_URL } from "../constants/baseURL";
 
 export const contactsApi = createApi({
   reducerPath: "contacts",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://62fd3a2f6e617f88dea72172.mockapi.io/api/",
+    baseUrl: BASE_URL,
   }),
   tagTypes: [{ type: "Contacts" }],
   endpoints: (builder) => ({
     getContacts: builder.query({
-      query: () => `contacts`,
+      query: () => "contacts",
       providesTags: (result) =>
         result
           ? [
@@ -20,7 +22,7 @@ export const contactsApi = createApi({
 
     addContact: builder.mutation({
       query: (body) => ({
-        url: `contacts`,
+        url: "contacts",
         method: "POST",
         body,
       }),
@@ -36,8 +38,30 @@ export const contactsApi = createApi({
   }),
 });
 
+// ------------------------------------------
+
+export const filterSlice = createSlice({
+  name: "contactsFilter",
+  initialState: "",
+  reducers: {
+    setFilter(state, action) {
+      return (state = action.payload);
+    },
+  },
+});
+
+// ----------------------------------------
+
+export const rootReducer = combineReducers({
+  contacts: contactsApi.reducer,
+  contactsFilter: filterSlice.reducer,
+});
+
 export const {
   useGetContactsQuery,
   useAddContactMutation,
   useDeleteContactMutation,
 } = contactsApi;
+
+export const contactsFilterSelector = (state) => state.contactsFilter;
+export const { setFilter } = filterSlice.actions;

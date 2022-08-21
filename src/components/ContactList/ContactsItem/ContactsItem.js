@@ -1,4 +1,5 @@
 import PropTypes from "prop-types";
+import toast from "react-hot-toast";
 import { useDeleteContactMutation } from "../../../redux/contactsApi";
 import { Item, Description, Button } from "./ContactsItem.styled";
 
@@ -7,7 +8,7 @@ export const ContactItem = ({ contact: { id, name, phone } }) => {
   const handleDeleteContact = async () => {
     await deleteContact({ id });
     if (error) {
-      alert("Something went wrong. Please try again");
+      toast.error("Something went wrong. Please try again");
     }
   };
   return (

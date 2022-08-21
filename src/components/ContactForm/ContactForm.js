@@ -1,29 +1,14 @@
 import { Formik, ErrorMessage } from "formik";
-import * as Yup from "yup";
+import toast from "react-hot-toast";
 import {
   useGetContactsQuery,
   useAddContactMutation,
 } from "../../redux/contactsApi";
 import { FormContact, Label, Input, ButtonSubmit } from "./ContactForm.styled";
 
-export const ContactForm = () => {
-  const nameRegExp =
-    /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/;
-  const phoneRegExp =
-    /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
-  const initialValues = {
-    name: "",
-    phone: "",
-  };
-  const validationSchema = Yup.object({
-    name: Yup.string()
-      .matches(nameRegExp, "The name must contain only characters")
-      .required("Required field"),
-    phone: Yup.string()
-      .matches(phoneRegExp, "Phone number is not valid")
-      .required("Required field"),
-  });
+import { validationSchema } from "../../helpers/validationSchema";
 
+export const ContactForm = () => {
   const { data: contacts } = useGetContactsQuery();
   const [addContact] = useAddContactMutation();
 
@@ -33,7 +18,7 @@ export const ContactForm = () => {
       (contact) => contact.name.toLowerCase() === name.toLowerCase()
     );
     if (hasNameInContacts) {
-      alert(`${name} is already in contacts`);
+      toast.error(`Name ${name} is already in contacts`);
       return;
     }
     await addContact(contactsObject);
@@ -42,7 +27,10 @@ export const ContactForm = () => {
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={{
+        name: "",
+        phone: "",
+      }}
       validationSchema={validationSchema}
       onSubmit={handleSubmit}
     >
